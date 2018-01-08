@@ -11,26 +11,21 @@
   <ion-item icon-only (click)="goPost()">
       <ion-icon item-right ios="ios-create" md="md-create"></ion-icon>
   </ion-item>
-    <ion-card>
+    <ion-card *ngFor="let item of items">
 
-        <img src="assets/img/nin-live.png"/>
+        <img src="{{item.userImage}}"/>
 
         <ion-card-content>
           <ion-card-title>
-          {{ username }}
+          {{ item.userName }}
           </ion-card-title>
           <p>
-          The most popular industrial group ever, and largely responsible for bringing the music to a mass audience.
+          {{ item.userComment }}
           </p>
-        </ion-card-content>
-      
-        <ion-card-content>
-          <p>Wait a minute. Wait a minute, Doc. Uhhh... Are you telling me that you built a time machine... out of a DeLorean?! Whoa. This is heavy.</p>
-        </ion-card-content>
-      
+        </ion-card-content>      
         <ion-row>
           <ion-col>
-            <button ion-button color="primary" clear small icon-start>
+            <button ion-button color="primary" clear small icon-start (click)="onLike()" >
               <ion-icon name='thumbs-up'></ion-icon>
               12 Likes
             </button>

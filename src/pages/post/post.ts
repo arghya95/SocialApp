@@ -3,6 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import * as firebase from 'firebase';
 import { HomePage } from '../home/home';
+// import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 
 /**
  * Generated class for the PostPage page.
@@ -20,8 +21,19 @@ export class PostPage {
   storageRef:any;
   downloadUrl:any;
   userId: any;
+  postContent:any;
+  selfRef:any;
+  userName: any;
   constructor(public navCtrl: NavController, public navParams: NavParams,private camera: Camera) {
     this.userId = firebase.auth().currentUser.uid; //user id of current logged in user
+    let selfRef = firebase.database().ref('/userSummary/' + this.userId);
+    console.log(selfRef);
+    selfRef.on('value',(snapuser:any)=>{
+      if(snapuser.val()){
+        console.log(snapuser.val()); 
+        this.userName = snapuser.val().fname + ' ' + snapuser.val().lname;
+      }
+   });
   }
 
   ionViewDidLoad() {
@@ -41,7 +53,13 @@ export class PostPage {
      // If it's base64:
     //  console.log(imageData);
      this.base64Image = 'data:image/jpeg;base64,' + imageData;
-     this.storageRef = firebase.storage().ref();
+    }, (err) => {
+      console.log('imageData not found');
+     // Handle error
+    }); 
+  }
+  sendPost(base64Image,userId) {
+    this.storageRef = firebase.storage().ref();
      const filename = Math.floor(Date.now() / 1000);
      const imageRef = this.storageRef.child(`images/${filename}.jpg`);
      console.log(this.storageRef);
@@ -49,21 +67,18 @@ export class PostPage {
       alert('upload success');
       console.log(snapshot.downloadURL);
       this.downloadUrl = snapshot.downloadURL;
-
+      firebase.database().ref('/userPost/').push({
+        userId: this.userId,
+        userName:this.userName,
+        userImage:snapshot.downloadURL,
+        userComment:this.postContent
+      });
+      // firebase.database().ref('/userSummary/' + this.userId + '/usercomment/').set(this.postContent);
      })
+     
+    // this.selfRef = firebase.database().ref('/userSummary/' + this.userId);
+     console.log(this.selfRef);
 
-  //    .getDownloadURL().then(url =>
-  //     console.log(url)
-  // );
-     //this.test('data');
-    
-
-    }, (err) => {
-      console.log('imageData not found');
-     // Handle error
-    }); 
-  }
-  sendPost() {
     this.navCtrl.setRoot(HomePage);
   }
 
