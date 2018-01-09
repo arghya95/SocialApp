@@ -15,7 +15,8 @@ import { MenuController } from 'ionic-angular/components/app/menu-controller';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = LoginPage;
+  //rootPage: any = LoginPage;
+  rootPage:any;
 
   pages: Array<{title: string, component: any}>;
 
@@ -36,6 +37,19 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      firebase.auth().onAuthStateChanged((user)=>{
+        if (user) {
+          console.log(user);
+          this.rootPage = HomePage;
+          // User is signed in.
+        } else {
+          console.log(user);
+          this.rootPage = LoginPage;
+          // No user is signed in.
+        }
+      });
+
     });
   }
 

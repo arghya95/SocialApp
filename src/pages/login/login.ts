@@ -21,6 +21,10 @@ export class LoginPage {
   public password: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public alertCtrl: AlertController) {
+    // var user = firebase.auth().currentUser;
+    // console.log(user);
+
+    
   }
 
   ionViewDidLoad() {

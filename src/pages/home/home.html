@@ -11,7 +11,7 @@
   <ion-item icon-only (click)="goPost()">
       <ion-icon item-right ios="ios-create" md="md-create"></ion-icon>
   </ion-item>
-    <ion-card *ngFor="let item of items">
+    <ion-card *ngFor="let item of items; let i=index;">
 
         <img src="{{item.userImage}}"/>
 
@@ -25,19 +25,19 @@
         </ion-card-content>      
         <ion-row>
           <ion-col>
-            <button ion-button color="primary" clear small icon-start (click)="onLike()" >
+            <button ion-button color="primary" clear small icon-start (click)="onLike(i)" >
               <ion-icon name='thumbs-up'></ion-icon>
-              12 Likes
+              {{item.likeCount}} Likes
             </button>
           </ion-col>
           <ion-col>
-            <button ion-button color="primary" clear small icon-start>
+            <!-- <button ion-button color="primary" clear small icon-start>
               <ion-icon name='text'></ion-icon>
               4 Comments
-            </button>
+            </button> -->
           </ion-col>
           <ion-col text-right>
-              <button ion-button clear small color="danger" icon-start (click)="onShare()">
+              <button ion-button clear small color="danger" icon-start (click)="onShare(i)">
                 <ion-icon name='share-alt'></ion-icon>
                 Share
               </button>

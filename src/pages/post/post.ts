@@ -29,7 +29,7 @@ export class PostPage {
     let selfRef = firebase.database().ref('/userSummary/' + this.userId);
     console.log(selfRef);
     selfRef.on('value',(snapuser:any)=>{
-      if(snapuser.val()){
+      if(snapuser.val()) {
         console.log(snapuser.val()); 
         this.userName = snapuser.val().fname + ' ' + snapuser.val().lname;
       }
