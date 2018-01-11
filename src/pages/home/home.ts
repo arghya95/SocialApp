@@ -18,6 +18,7 @@ export class HomePage {
   public likes: Array<any> = [];
   userid: any;
   count:number;
+  LikeUserIdRef: any;
   // itemUid: any;
 
   constructor(public navCtrl: NavController,private socialSharing: SocialSharing,public loadingCtrl: LoadingController) {
@@ -36,6 +37,7 @@ export class HomePage {
       for(let key in details) {
         // this.itemUid = details[key].uid
         details[key].uid = key;  
+        console.log(details[key].likes);
         // this.onLike(this.itemUid);
         //console.log("key is: " + key)
         // console.log(details[key])
@@ -47,7 +49,8 @@ export class HomePage {
         console.log(reference);
         for(let key in reference ) {
           this.count = this.count+1;
-          // this.likes.push(reference[key]);  
+          // this.likes.push(reference[key]); 
+          // console.log(reference[key]) 
         }
         details[key].likeCount = this.count;
         this.items.push(details[key]);
@@ -68,12 +71,34 @@ export class HomePage {
   goPost() {
     this.navCtrl.push(PostPage);
   }
-  onLike(index) {
-    console.log(index);
+  onLike(k) {
     this.userid = firebase.auth().currentUser.uid;
-    firebase.database().ref('/userPost/'+this.items[index].uid+'/likes/' + this.userid + '/').set({
-      like: true
-    });
+    if(this.items[k].likes != undefined){
+    // console.log(index);
+    
+    this.LikeUserIdRef = firebase.database().ref('/userPost/')
+    console.log(this.items[k].likes);
+    for(var l in this.items[k].likes) {
+      this.items[k].likes[l].likeUser=l
+      console.log(l);
+     if(l == this.userid) {
+        firebase.database().ref('/userPost/'+this.items[k].uid+'/likes/'+this.userid).remove();
+        // console.log(
+      }
+      else {
+        firebase.database().ref('/userPost/'+this.items[k].uid+'/likes/' + this.userid + '/').set({
+          like: true
+          });
+      }
+    }
+    // firebase.database().ref('/userPost/'+this.items[k].uid+'/likes/' + this.userid + '/').set({
+    //   like: true
+    //   });
+  }else{
+    firebase.database().ref('/userPost/'+this.items[k].uid+'/likes/' + this.userid + '/').set({
+         like: true
+         });
+  }
   }
   onShare(index) {
     /*
@@ -86,10 +111,23 @@ this.socialSharing.canShareViaEmail().then(() => {
 */
 // Share via email
 this.socialSharing.share(this.items[index].userComment,null ,null,this.items[index].userImage).then(() => {
-  // Success!
-}).catch(() => {
-  // Error!
-});
+      // Success!
+    }).catch(() => {
+      // Error!
+    });
+  }
+  onDeletePost(index) {
+    this.userid = firebase.auth().currentUser.uid;
+    let userIdRef = firebase.database().ref('/userPost/'+this.items[index].userId).key;
+    console.log(this.userid)
+    console.log(userIdRef);
+    if(userIdRef === this.userid){
+      firebase.database().ref('/userPost/'+this.items[index].uid).remove();
+    }
+    else{
+      alert('This is not Your Post');
+    }
+    
   }
 
 }

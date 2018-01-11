@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild,NgZone } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -16,18 +16,36 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   //rootPage: any = LoginPage;
-  rootPage:any;
+  public rootPage:any;
 
   pages: Array<{title: string, component: any}>;
-
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public menu: MenuController) {
+  //constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public menu: MenuController) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public zone:NgZone,public splashScreen: SplashScreen, public menu: MenuController) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      // { title: 'List', component: ListPage }
     ];
+
+    
+    firebase.auth().onAuthStateChanged((user)=>{
+      if (user) {
+        console.log(user);
+        this.zone.run(()=>{
+        this.rootPage = HomePage;
+        })
+        // User is signed in.
+      } else {
+        console.log(user);
+        this.zone.run(()=>{
+        this.rootPage = LoginPage;
+        })
+        // No user is signed in.
+      }
+    });
+
 
   }
 
@@ -38,18 +56,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      firebase.auth().onAuthStateChanged((user)=>{
-        if (user) {
-          console.log(user);
-          this.rootPage = HomePage;
-          // User is signed in.
-        } else {
-          console.log(user);
-          this.rootPage = LoginPage;
-          // No user is signed in.
-        }
-      });
-
+      
     });
   }
 
@@ -65,4 +72,8 @@ export class MyApp {
     // this.sidemenuhide = true
     this.menu.close();
   }
+
+ 
+
+
 }

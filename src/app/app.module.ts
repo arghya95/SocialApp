@@ -14,6 +14,8 @@ import * as firebase from 'firebase';
 import { LoginPage } from '../pages/login/login';
 import { Camera } from '@ionic-native/camera';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { GooglePlus } from '@ionic-native/google-plus';
+import { Facebook } from '@ionic-native/facebook';
 
 var config = {
   apiKey: "AIzaSyA_vQzljIM1NebUlDa1TNu2_WJiZk54kAI",
@@ -51,6 +53,8 @@ firebase.initializeApp(config);
     StatusBar,
     SplashScreen,
     Camera,
+    Facebook,
+    GooglePlus,
     SocialSharing,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

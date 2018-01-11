@@ -4,6 +4,8 @@ import * as firebase from 'firebase';
 import { HomePage } from '../home/home';
 import { RegisterPage } from '../register/register';
 import { AlertController } from 'ionic-angular/components/alert/alert-controller';
+import { GooglePlus } from '@ionic-native/google-plus';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 /**
  * Generated class for the LoginPage page.
@@ -20,8 +22,8 @@ export class LoginPage {
   public email: any;
   public password: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public alertCtrl: AlertController) {
-    // var user = firebase.auth().currentUser;
+  constructor(public navCtrl: NavController, public navParams: NavParams,public alertCtrl: AlertController,private googlePlus: GooglePlus,private fb: Facebook) {
+    var user = firebase.auth().currentUser;
     // console.log(user);
 
     
@@ -42,6 +44,51 @@ export class LoginPage {
         alert(_error.message);
       });
    }
+
+   doGoogleLogin() {
+    this.googlePlus.login({
+      'webClientId': '394798466089-mpc8sq8nhhomh9fiumv8nafmrof3a5uu.apps.googleusercontent.com',
+      'offline': true
+    })
+  .then(res => {
+    console.log(res);
+    var provider = firebase.auth.GoogleAuthProvider.credential(res.idToken);
+               console.log(provider);
+               firebase.auth().signInWithCredential(provider)
+        .then( response => {
+            console.log("Firebase success: " + JSON.stringify(response));
+            firebase.database().ref('/userSummary').child(response.uid).set({
+              fname: res.givenName,
+              lname: res.familyName,
+              email: res.email,
+              mobile: res.imageUrl
+            })
+            this.navCtrl.setRoot(HomePage);
+        });
+  })
+  .catch(err => console.error(err));
+  }
+  
+  doFacebookLogin() {
+    this.fb.login(['public_profile', 'user_friends', 'email'])
+  .then((res: FacebookLoginResponse) => {
+    console.log('Logged into Facebook!', res);
+    var provider = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
+               console.log(provider);
+               firebase.auth().signInWithCredential(provider)
+        .then( response => {
+            console.log(response);
+            firebase.database().ref('/userSummary').child(response.uid).set({
+              name: response.displayName,
+              email: response.providerData[0].email,
+              mobile: response.photoURL
+            })
+            this.navCtrl.setRoot(HomePage);
+        });
+  })
+  .catch(e => console.log('Error logging into Facebook', e));
+  }
+
    goRegister() {
     this.navCtrl.push(RegisterPage);
   }

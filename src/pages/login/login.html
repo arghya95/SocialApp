@@ -30,6 +30,16 @@
       
       <div padding>
         <button ion-button block (click)="goLogin()">Sign In</button>
+        <ion-row class="bottom-row">
+          <ion-col class="login-button">
+            <button ion-button block color="danger" (click)="doGoogleLogin()">Google Login</button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="bottom-row">
+          <ion-col class="login-button">
+            <button ion-button block color="primary" (click)="doFacebookLogin()">Facebook Login</button>
+          </ion-col>
+        </ion-row>
         
         <div padding center>
           <button (click)="goRegister()">Register</button> | <button (click)="forgetPassword()">Forgot password?</button>

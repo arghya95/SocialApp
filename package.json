@@ -22,6 +22,8 @@
         "@angular/platform-browser-dynamic": "5.0.0",
         "@ionic-native/camera": "^4.5.2",
         "@ionic-native/core": "4.3.2",
+        "@ionic-native/facebook": "^4.5.2",
+        "@ionic-native/google-plus": "^4.5.2",
         "@ionic-native/social-sharing": "^4.5.2",
         "@ionic-native/splash-screen": "4.3.2",
         "@ionic-native/status-bar": "4.3.2",
@@ -30,6 +32,8 @@
         "cordova-plugin-camera": "^2.4.1",
         "cordova-plugin-compat": "^1.2.0",
         "cordova-plugin-device": "^1.1.4",
+        "cordova-plugin-facebook4": "^1.9.1",
+        "cordova-plugin-googleplus": "^5.2.1",
         "cordova-plugin-ionic-webview": "^1.1.16",
         "cordova-plugin-splashscreen": "^4.0.3",
         "cordova-plugin-whitelist": "^1.3.1",
@@ -58,7 +62,14 @@
             "cordova-plugin-splashscreen": {},
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
-            "cordova-plugin-camera": {}
+            "cordova-plugin-camera": {},
+            "cordova-plugin-googleplus": {
+                "REVERSED_CLIENT_ID": "com.googleusercontent.apps.394798466089-mpc8sq8nhhomh9fiumv8nafmrof3a5uu"
+            },
+            "cordova-plugin-facebook4": {
+                "APP_ID": "201662913717465",
+                "APP_NAME": "LoginApp"
+            }
         },
         "platforms": [
             "android"
