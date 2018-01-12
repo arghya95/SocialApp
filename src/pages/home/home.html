@@ -28,16 +28,14 @@
         </ion-card-content>      
         <ion-row>
           <ion-col>
-            <button ion-button color="primary" clear small icon-start (click)="onLike(i)" >
+            <button ion-button color="primary" *ngIf="item.colorFlag == false" clear small icon-start (click)="onLike(i)" >
               <ion-icon name='thumbs-up'></ion-icon>
               {{ item.likeCount }} Likes
             </button>
-          </ion-col>
-          <ion-col>
-              <!-- <button ion-button color="secondary" *ngIf="" clear small icon-start (click)="onLike(i)">
+              <button ion-button color="secondary" *ngIf="item.colorFlag == true" clear small icon-start (click)="onLike(i)">
                   <ion-icon name='thumbs-up'></ion-icon>
                   {{ item.likeCount }} Likes
-                </button> -->
+                </button>
             <!-- <button ion-button color="primary" clear small icon-start>
               <ion-icon name='text'></ion-icon>
               4 Comments

@@ -59,10 +59,11 @@ export class PostPage {
      // Handle error
     }); 
   }
-  sendPost(base64Image,userId) {
+  sendPost(base64Image,userId,data) {
     // console.log(this.base64Image);
-      if(this.base64Image === undefined) {
-        if(this.postContent === undefined || this.postContent === null) {
+      if(this.base64Image == undefined) {
+        // console.log('ghfuhrfirfv:'+this.postContent.trim());
+        if(this.postContent == undefined || this.postContent == null || this.postContent.trim() == '') {
           console.log('ldle'+this.postContent)
           const toast = this.toastCtrl.create({
             message: "Please Put Some Comment in Comment Section..",
@@ -72,6 +73,7 @@ export class PostPage {
           });
           toast.onDidDismiss(() => {
             console.log('Dismissed toast');
+            this.postContent = null
           });
           toast.present();  
         }
@@ -86,7 +88,7 @@ export class PostPage {
         }
       }
       else {
-        if(this.postContent === undefined) {
+        if(this.postContent == undefined || this.postContent == null || this.postContent.trim() == '') {
           const toast = this.toastCtrl.create({
             message: "Please Put Some Comment in Comment Section..",
             showCloseButton: true,

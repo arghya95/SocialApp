@@ -19,6 +19,7 @@ export class HomePage {
   userid: any;
   count:number;
   LikeUserIdRef: any;
+  public colorFlag: boolean = false;
   // itemUid: any;
 
   constructor(public navCtrl: NavController,private socialSharing: SocialSharing,public loadingCtrl: LoadingController) {
@@ -26,6 +27,7 @@ export class HomePage {
       content: 'Please wait...'
     });
     loading.present();
+    // this.colorFlag = false;
     var user = firebase.auth().currentUser;
     console.log(user);
     let selfRef = firebase.database().ref('/userPost');
@@ -38,22 +40,36 @@ export class HomePage {
         // this.itemUid = details[key].uid
         details[key].uid = key;  
         console.log(details[key].likes);
-        // this.onLike(this.itemUid);
-        //console.log("key is: " + key)
-        // console.log(details[key])
-        // console.log(details)
-        // this.likes = [];
+        console.log(details[key]);
         this.count = 0; 
         // console.log(details[key].likes);  
         let reference = details[key].likes;
+        
         console.log(reference);
-        for(let key in reference ) {
-          this.count = this.count+1;
+        if(reference == undefined) {
+          details[key].colorFlag = false;
+        }
+        for(let likekey in reference ) {
           // this.likes.push(reference[key]); 
           // console.log(reference[key]) 
+          details[key].likes[likekey].likeUser=likekey;
+          console.log(likekey);
+          this.colorFlag = details[key].colorFlag;
+          if(likekey == user.uid) {
+            details[key].colorFlag = true;
+            //this.colorFlag = details[key].colorFlag;
+          }
+          else {
+              details[key].colorFlag = false;
+              //this.colorFlag = details[key].colorFlag;
+          }
+          this.count = this.count+1; 
         }
         details[key].likeCount = this.count;
+      
         this.items.push(details[key]);
+      
+
       }
       console.log("start "+this.count);
       console.log(this.items);
@@ -83,12 +99,13 @@ export class HomePage {
       console.log(l);
      if(l == this.userid) {
         firebase.database().ref('/userPost/'+this.items[k].uid+'/likes/'+this.userid).remove();
-        // console.log(
+        this.items[k].colorFlag = false;
       }
       else {
         firebase.database().ref('/userPost/'+this.items[k].uid+'/likes/' + this.userid + '/').set({
           like: true
           });
+          this.items[k].colorFlag = true;
       }
     }
     // firebase.database().ref('/userPost/'+this.items[k].uid+'/likes/' + this.userid + '/').set({
@@ -98,6 +115,7 @@ export class HomePage {
     firebase.database().ref('/userPost/'+this.items[k].uid+'/likes/' + this.userid + '/').set({
          like: true
          });
+         this.items[k].colorFlag = true;
   }
   }
   onShare(index) {
